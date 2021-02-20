@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 // data
+import { todos } from './todos.json';
 // subcomponents
-import {db} from './firebase'
 import TodoForm from './components/TodoForm';
 
 class App extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      todos
+    };
     this.handleAddTodo = this.handleAddTodo.bind(this);
   }
 
@@ -18,19 +20,10 @@ class App extends Component {
   //Recibe una tarea como parámetro
   //Vamos a actualizar el estado de las tareas agregando esta nueva tarea que esta llegamdo
 
-  async getTodos() {
-    db.collection('todos').onSnapshot( ( querySnapshot ) => {
-      querySnapshot.forEach( doc => { console.log( doc.data() ) } );
-      console.log("Componetne Montado");
-    } );
-  }
-
-  componentDidMount() {
-    this.getTodos()
-  }
-
-  async handleAddTodo(datos){
-    await db.collection('todos').doc().set(datos);
+  handleAddTodo(todo){
+    this.setState({
+      todos: [...this.state.todos, todo]
+    })
   }
 
   //Fliter ---metodo que recorre uno a uno los elementos del array y si un dato no cumple con una condicion, no
@@ -47,13 +40,40 @@ class App extends Component {
   }
 
   render() {
+    const todos = this.state.todos.map((todo, i) => {
+      return (
+        <div className="col-md-4" key={i}>
+          <div className="card mt-4">
+            <div className="card-header">
+              <h3>{todo.title}</h3>
+              <button className="btn btn-primary">
+                {todo.priority}
+              </button>
+            </div>
+            <div className="card-body">
+              <p>{todo.description}</p>
+              <p><mark>{todo.responsible}</mark></p>
+            </div>
+            <div className="card-footer">
+              <button
+                className="btn btn-danger"
+                onClick={this.removeTodo.bind(this, i)}
+              >
+              Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )
+    })
 
     return (
       <div className="App">
         <nav className="navbar navbar-dark bg-dark">
           <a href="" className="text-white">
+            task
             <span className="badge badge-pill badge-light ml-2">
-              <h2>Logo</h2>
+              { this.state.todos.length }
             </span>
           </a>
         </nav>        
@@ -65,7 +85,7 @@ class App extends Component {
             </div>
             <div className="col-md-8">
               <div className="row">
-                <h1>Tareas</h1>
+                {todos}
               </div>
             </div>
           </div>-

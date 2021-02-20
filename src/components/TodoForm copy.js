@@ -23,18 +23,15 @@ class TodoForm extends Component {
         this.setState({
             [name]: value
         })
+        console.log(this.state)
     }
 
-    handleSubmit(e) {
-        e.preventDefault();
-        this.props.onAddTodo(this.state);
-        this.setState({
-            title: '',
-            responsible: '',
-            description: '',
-            priority: 'low'
-        });
-    }
+    // handleSubmit(e) {
+    //     e.preventDefault();
+    //     this.props.onAddTodo(this.state);
+    //     console.log('sending the data...');
+    // }
+
     
     render() {
         return (
@@ -48,7 +45,6 @@ class TodoForm extends Component {
                             onChange={this.handleInput}
                             className="form-control"
                             placeholder="Title"
-                            value={this.state.title}
                         />
                     </div>
                     <div className="form-group">
@@ -58,7 +54,6 @@ class TodoForm extends Component {
                             className="form-control"
                             placeholder="Responsible"
                             onChange={this.handleInput}
-                            value={this.state.responsible}
                         />
                     </div>
                     <div className="form-group">
@@ -68,7 +63,6 @@ class TodoForm extends Component {
                             className="form-control"
                             placeholder="Description"
                             onChange={this.handleInput}
-                            value={this.state.description}
                         />
                     </div>
                     <div className="form-group">
